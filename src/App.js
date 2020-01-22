@@ -5,13 +5,13 @@ import { compose, lifecycle, withHandlers, withState } from "recompose";
 const renderNotification = (notification, i) => <li key={i}>{notification}</li>;
 
 const registerPushListener = pushNotification =>
-  navigator.serviceWorker.addEventListener("message", ({ data }) =>
-    pushNotification(
-      data.data
-        ? data.data.message
-        : data["firebase-messaging-msg-data"].data.message
-    )
-  );
+  navigator.serviceWorker.addEventListener("message", ({ data }) => {
+          const [type, message] = Object.values(data);
+
+          pushNotification(
+              message.notification.body
+          )
+  });
 
 const App = ({ token, notifications }) => (
   <>
